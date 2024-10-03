@@ -23,7 +23,20 @@ public class DbConnectionImp implements DbConnection {
     }
 
     @Override
-    public void insert() {
+    public void insert(Product product) {
+        try {
+            var request = "INSERT INTO public.products_db(model, price) VALUES(?, ?)";
+            var connection = connect();
+            var prepareStatement = connection.prepareStatement(
+                    request, Statement.RETURN_GENERATED_KEYS
+            );
+            prepareStatement.setString(1, product.getModel());
+            prepareStatement.setDouble(2, product.getPrice());
+            prepareStatement.executeUpdate();
+            System.out.println("Data insertion completed");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
